@@ -1,0 +1,60 @@
+version: '3.9'
+
+services:
+
+  doctors:
+    image: ${DOCKER_USERNAME}/doctors:${DOCTORS_VERSION}
+    build:
+      context: doctors/
+      dockerfile: Dockerfile
+    init: true
+    networks:
+      - mynet
+    env_file:
+      - .env
+
+  appointments:
+    image: ${DOCKER_USERNAME}/appointments:${APPOINTMENT_VERSION}
+    build:
+      context: appointments/
+      dockerfile: Dockerfile
+    init: true
+    networks:
+      - mynet
+    env_file:
+      - .env
+
+  frontend:
+    image: ${DOCKER_USERNAME}/frontend:${FRONTEND_VERSION} 
+    build:
+      context: frontend/
+      dockerfile: Dockerfile
+    init: true
+    environment:
+      DOCTORS_SERVICE_URL: doctors:9090
+      APPOINTMENTS_SERVICE_URL: appointments:7070
+    networks:
+      - mynet
+    ports:
+      - "3000:3000"
+    depends_on:
+      - doctors
+      - appointments
+    env_file:
+      - .env
+  
+  db:
+    image: mysql:latest
+    ports:
+      - 3306:3306
+    environment:
+      MYSQL_ROOT_PASSWORD: example
+      MYSQL_DATABASE: mydatabase
+      MYSQL_USER: myuser
+      MYSQL_PASSWORD: mypassword
+    volumes:
+      - ./data:/var/lib/mysql
+
+networks:
+  mynet:
+    driver: bridge
