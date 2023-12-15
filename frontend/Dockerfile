@@ -1,4 +1,4 @@
-#Dockerfile for Frontend DevOps Project
+#Dockerfile for Frontend DevOps-Project
 # Use the official Node.js 14 image as the base image
 FROM node:14
 

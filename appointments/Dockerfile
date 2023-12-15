@@ -1,4 +1,4 @@
-#Dockerfile for Appointment DevOps Project
+#Dockerfile for Appointment DevOps-Project
 # Use the official Python 3.9 image as the base image
 FROM python:3.9
 
